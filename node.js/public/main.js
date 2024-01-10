@@ -21,7 +21,10 @@ function searchCities() {
 
     // Fetch data from API
     fetch(apiUrl)
-    .then(response => response.json())
+    .then(response => {
+        console.log('Backend Response:', response);
+        return response.json();
+    })
     .then(data => {
         console.log('API Response:', data.records);
         // Assuming data is always an array
@@ -30,6 +33,7 @@ function searchCities() {
         } else { // Alternatively, if data could be an object, handle it accordingly
             displayCities(data.records);
         }
+        return data;
     })
     .catch(error => console.error('Error fetching data:', error));
 }
@@ -72,6 +76,7 @@ function getCountryInfo(latitude, longitude) {
     .then(data => {
         var countryName = data.address.country;
         searchCitiesByCountry(countryName);
+        return data;
     })
     .catch(error => console.error('Error fetching country data:', error));
 }
@@ -83,7 +88,9 @@ function searchCitiesByCountry(countryName) {
 
     // Fetch data from API
     fetch(apiUrl)
-        .then(response => response.json())
+        .then(response => {
+            return response.json();
+        })
         .then(data => displayCities(data.records))
         .catch(error => console.error('Error fetching data:', error));
 }

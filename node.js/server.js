@@ -19,6 +19,7 @@ app.use(express.static(new URL('public', import.meta.url).pathname));
 app.get('/api/cities', async (req, res) => {
     try {
         const country = req.query.country;
+        console.log('Looking for the top 5 cities of: ', country);
         const apiUrl = `https://data.opendatasoft.com/api/explore/v2.1/catalog/datasets/geonames-all-cities-with-a-population-1000@public/records?select=name%2C%20population&order_by=population%20DESC&limit=5&refine=cou_name_en%3A${country}`;
 
         // Make the API call
@@ -26,7 +27,13 @@ app.get('/api/cities', async (req, res) => {
 
         // Log the response to the console
         console.log('API Response:', response.status, response.statusText);
- 
+
+        if (!response.ok) {
+            console.error('Error fetching cities data - Status:', response.status);
+            res.status(response.status).json({ error: `Failed to fetch cities data - Status: ${response.status}` });
+            return;
+        }
+
         const data = await response.json();
         res.json(data);
     } catch (error) {
@@ -34,6 +41,7 @@ app.get('/api/cities', async (req, res) => {
         res.status(500).json({ error: 'Internal Server Error' });
     }
 });
+
 
 // API endpoint for reverse geocoding to get country info
 app.get('/api/country-info', async (req, res) => {
