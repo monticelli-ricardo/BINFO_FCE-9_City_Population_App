@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WP.Exercise3 - JS City Population App</title>
+    <script asyc src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+    <style>
+        #map {
+            height: 400px;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>City Population Finder</h1>
+
+    <label for="countryInput">Enter Country Name:</label>
+    <input type="text" id="countryInput" placeholder="Type a country name">
+
+    <button onclick="searchCities()">Search Cities</button>
+
+    <div id="map"></div>
+
+    <table id="resultTable">
+        <thead>
+            <tr>
+                <th>City Name</th>
+                <th>Population</th>
+            </tr>
+        </thead>
+        <tbody></tbody>
+    </table>
+
+    <script src="./main.js"></script>
+</body>
+</html>

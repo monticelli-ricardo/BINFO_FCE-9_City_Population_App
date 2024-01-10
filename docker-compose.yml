@@ -1,0 +1,37 @@
+version: "3.2"
+
+services:
+  nodejs:
+    build: ./node.js
+    links:
+         - DB 
+    ports:
+         - 8081:8080
+    volumes:
+         - ./node.js:/src
+
+  DB:
+    image: mariadb:latest
+    ports:
+        - 3306:3306
+    volumes:
+        - mariadbvolume:/var/lib/mysql
+    environment:
+        MARIADB_ROOT_PASSWORD: secret
+        MARIADB_DATABASE: webprog 
+        MARIADB_USER: webprog 
+        MARIADB_PASSWORD: webprog
+
+
+  nginx:
+    build: ./nginx/
+    ports:
+       - 8080:80
+    depends_on:
+       - nodejs 
+    links:
+       - nodejs
+
+volumes:
+    mariadbvolume:
+        name: "webprog_mariadb_nodejs_volume"
