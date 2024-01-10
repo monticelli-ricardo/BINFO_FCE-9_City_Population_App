@@ -1,21 +1,36 @@
-# Docker Container for NGinx - Node.JS - MariaDB
+# Exercise3 - JS City Population App
 
-## Configuration
+## Description
+This is a JS-based web page that retrieves information about the population of cities. 
+The data is accessible in JSON format on the REST API endpoint: 'https://data.opendatasoft.com/explore/dataset/geonames-all-cities-with-a-population-1000%40public/api/?disjunctive.cou_name_en '
 
-Before using the examples, please ensure that the DB is pre-loaded with data, in two possible ways:
+### The web application contains:
+    1.- An user input element for a country name.
+    2.- An API query with an appropriate query string that determines the population of the 5 biggest cities in the user selected country. 
+    3.- An interface where:
+        3.1.- The information "City name, population" is displayed to the user in a table, ordered by decreasing population size.
+        3.2.- An OpenStreetMap map, where the user clicks on a position on the map, then the application will determine the country and the population information. 
 
-1. If the mariadb client program is installed on the host, then it can be used to load the dump file into the DB: `mariadb -h 127.0.0.1 -u webprog -p webprog < DB.dump`.
+### In terms of desing (requirements):
+    1.- The REST API query limits the response size to the minimally required data and avoids any "unneeded data" in the response. Code snippet:
+            // Construct API query URL with specific fields
+            var apiUrl = 'https://data.opendatasoft.com/explore/dataset/geonames-all-cities-with-a-population-1000%40public/api/?disjunctive.cou_name_en&fields=city_name,population&refine.cou_name_en=' + countryInput;
+            // Fetch data from API
+            fetch(apiUrl)
+                .then(response => response.json())
+                .then(data => displayCities(data.records))
+                .catch(error => console.error('Error fetching data:', error));
+    2.- The OpenStreetMap response is displayed in an overlay window With a "close" functionality so the user can "click" on the map again, if desired.
+    3.- The Leaflet JS library which is a lightweight and versatile library for creating interactive maps. The Leaflet library is then used to set up the map and handle map-related functionalities in the main.js file.
+    4.- The Docker-compose stack 'nginx-nodejs-mariadb' is used to run this JS-based web application. Here's why:
+            * Node.js Application: The provided JavaScript code is written using Node.js for the server-side logic. The code includes client-side JavaScript that interacts with the OpenStreetMap API and performs various operations on the frontend. Therefore, a Node.js environment is required to run this application.
+            * Nginx: Nginx is commonly used as a web server and as a reverse proxy, forwarding requests to back-end servers, avoiding CORS (Cross-Origin Resource Sharing) issues. In this case, it is purely dedicated to reverse proxy end-user requests.
 
-2. Otherwise, the dump file DB.dump should be copied into the used volume (corresponding to folder `/var/lib/mysql` inside the container). You can find the folder on the host with `docker inspect`. Then log into the container using the command `docker exec -it ID /bin/bash`, where ID is replaced with the id of the container running the DB (you can get the id with the command `docker ps`). Finally, use the `mariadb` CLI available inside the container to load the dump file into the DB: `mariadb -u webprog -p webprog < /var/lib/mysql/DB.dump`.
+## Installation    
 
-Once the database has been initialized, you can build and run the Docker containers with `docker compose build; docker compose up -d`.
+Before using this application, you need complete the below steps.
 
-If the `Node.js` modules was not yet downloaded (not included in the zip archive for size reasons), then you also have to run `npm install` within the folder `./node.js` to get all the latest versions of the used modules.
+1.- Install Node.js modules locally. Run this command "npm install" in the folder "./node.js".
+2.- Build the docker-compose stack image "docker-compose up --build -d" in the APP root directory where the "docker-compose.yml" is located.
 
-## Examples
-
-The folder contains three different examples. The main file `index.js`` is a symbolic link to the current example. By changing this link, we can quickly switch to another example:
-
-1. `index-html.js`: simple example using only the basic `http` module: <http://localhost:8080/> ,
-2. `index-express.js`: simple example using the more advanced `express.js` module: <http://localhost:8080/> ,
-3. `index-REST.js`: example realizing a few simple REST endpoints using the `express.js` module, possible URL: <http://localhost:8080/listUsers>.
+Once the build is complete and all containers are running, you should be able to try this application from your browser, search this: http://localhost:8080/
