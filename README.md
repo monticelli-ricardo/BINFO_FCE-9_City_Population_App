@@ -11,7 +11,7 @@ The data is accessible in JSON format on the REST API endpoint: 'https://data.op
         3.1.- The information "City name, population" is displayed to the user in a table, ordered by decreasing population size.
         3.2.- An OpenStreetMap map, where the user clicks on a position on the map, then the application will determine the country and the population information. 
 
-### In terms of desing (requirements):
+### In terms of design (requirements):
     1.- The REST API query limits the response size to the minimally required data and avoids any "unneeded data" in the response. Code snippet:
             // Construct API query URL with specific fields
             var apiUrl = 'https://data.opendatasoft.com/explore/dataset/geonames-all-cities-with-a-population-1000%40public/api/?disjunctive.cou_name_en&fields=city_name,population&refine.cou_name_en=' + countryInput;
