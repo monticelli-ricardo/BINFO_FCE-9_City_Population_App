@@ -74,8 +74,9 @@ function getCountryInfo(latitude, longitude) {
         return response.json();
     })
     .then(data => {
-        var countryName = data.address.country;
-        searchCitiesByCountry(countryName);
+        var countryCode = data.address.country_code;
+        countryCode = countryCode.toUpperCase();
+        searchCitiesByCountry(countryCode);
         return data;
     })
     .catch(error => console.error('Error fetching country data:', error));
