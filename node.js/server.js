@@ -34,7 +34,7 @@ app.get('/api/cities', async (req, res) => {
             res.json(data);
         } else {
             // Country output from user input
-            const apiUrl = 'https://data.opendatasoft.com/api/explore/v2.1/catalog/datasets/geonames-all-cities-with-a-population-1000@public/records?select=name%2C%20population%2C%20cou_name_en&order_by=population%20DESC&limit=5&refine=country_code%3A' + encodeURIComponent(country);
+            const apiUrl = 'https://data.opendatasoft.com/api/explore/v2.1/catalog/datasets/geonames-all-cities-with-a-population-1000@public/records?select=name%2C%20population%2C%20cou_name_en&order_by=population%20DESC&limit=5&refine=cou_name_en%3A' + encodeURIComponent(country);
             console.log('API Request to OpenData: ', apiUrl);
             const response = await fetch(apiUrl); // Make the API call
             console.log('API Response:', response.status, response.statusText);
@@ -47,7 +47,6 @@ app.get('/api/cities', async (req, res) => {
         res.status(500).json({ error: 'Internal Server Error' });
     }
 });
-
 
 // API endpoint for reverse geocoding to get country info
 app.get('/api/country-info', async (req, res) => {
