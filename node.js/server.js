@@ -25,7 +25,7 @@ app.get('/api/cities', async (req, res) => {
         console.log('Looking for the top 5 cities of: ', country);
         if(regex.test(country)){
             //Country output from Map click
-            const apiUrl = 'https://data.opendatasoft.com/api/explore/v2.1/catalog/datasets/geonames-all-cities-with-a-population-1000@public/records?select=name%2C%20population&order_by=population%20DESC&limit=5&refine=country_code%3A' + encodeURIComponent(country);
+            const apiUrl = 'https://data.opendatasoft.com/api/explore/v2.1/catalog/datasets/geonames-all-cities-with-a-population-1000@public/records?select=name%2C%20population%2C%20cou_name_en&order_by=population%20DESC&limit=5&refine=country_code%3A' + encodeURIComponent(country);
             console.log('API Request to OpenData: ', apiUrl);
             const response = await fetch(apiUrl); // Make the API call
             console.log('API Response:', response.status, response.statusText);
@@ -34,7 +34,7 @@ app.get('/api/cities', async (req, res) => {
             res.json(data);
         } else {
             // Country output from user input
-            const apiUrl = 'https://data.opendatasoft.com/api/explore/v2.1/catalog/datasets/geonames-all-cities-with-a-population-1000@public/records?select=name%2C%20population&order_by=population%20DESC&limit=5&refine=cou_name_en%3A' + encodeURIComponent(country);
+            const apiUrl = 'https://data.opendatasoft.com/api/explore/v2.1/catalog/datasets/geonames-all-cities-with-a-population-1000@public/records?select=name%2C%20population%2C%20cou_name_en&order_by=population%20DESC&limit=5&refine=country_code%3A' + encodeURIComponent(country);
             console.log('API Request to OpenData: ', apiUrl);
             const response = await fetch(apiUrl); // Make the API call
             console.log('API Response:', response.status, response.statusText);
