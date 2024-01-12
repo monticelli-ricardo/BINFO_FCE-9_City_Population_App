@@ -9,34 +9,34 @@ The data is accessible in JSON format on the REST API endpoint: 'https://data.op
 
 ### The web application contains:
 
-    1.- An user input element for a country name. index.html code snippet:
-                <label for="countryInput">Enter Country Name in English:</label>
-                <input type="text" id="countryInput" placeholder="Type a country name">
-                <button onclick="searchCities()">Search Cities</button>
+1.- An user input element for a country name. index.html code snippet:
+        <label for="countryInput">Enter Country Name in English:</label>
+        <input type="text" id="countryInput" placeholder="Type a country name">
+        <button onclick="searchCities()">Search Cities</button>
 
-    2.- An API query with an appropriate query string that determines the population of the 5 biggest cities in the user selected country. Example used in the server-side of this application:
-                const apiUrl = 'https://data.opendatasoft.com/api/explore/v2.1/catalog/datasets/geonames-all-cities-with-a-population-1000@public/records?select=name%2C%20population%2C%20cou_name_en&order_by=population%20DESC&limit=5&refine=cou_name_en%3A' + encodeURIComponent(country);
+2.- An API query with an appropriate query string that determines the population of the 5 biggest cities in the user selected country. Example used in the server-side of this application:
+        const apiUrl = 'https://data.opendatasoft.com/api/explore/v2.1/catalog/datasets/geonames-all-cities-with-a-population-1000@public/records?select=name%2C%20population%2C%20cou_name_en&order_by=population%20DESC&limit=5&refine=cou_name_en%3A' + encodeURIComponent(country);
 
-    3.- An interface where:
+3.- An interface where:
 
-        3.1.- The information "City name, population" is displayed to the user in a table, ordered by decreasing population size. Code snippet: 
-                    // Fill up the table with the API response
-                    const tbody = tableBody.insertRow();
-                    for (const city of cityData) {
-                        const row = tableBody.insertRow();
-                        row.insertCell(0).textContent = city.name;
-                        row.insertCell(1).textContent = city.population;
-                    }
+    3.1.- The information "City name, population" is displayed to the user in a table, ordered by decreasing population size. Code snippet: 
+            // Fill up the table with the API response
+            const tbody = tableBody.insertRow();
+            for (const city of cityData) {
+                const row = tableBody.insertRow();
+                row.insertCell(0).textContent = city.name;
+                row.insertCell(1).textContent = city.population;
+            }
 
-        3.2.- An Leaftlet map, where the user clicks on a position on the map, then the application will determine the country and the population information. Code snippet:
-                    // Leaflet map setup
-                    const map = L.map('map').setView([0, 0], 2);
-                    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map);
-                    // Event listener for map click
-                    map.on('click', (e) => {
-                    const latlng = e.latlng;
-                    getCountryInfo(latlng.lat, latlng.lng);
-                    });
+    3.2.- An Leaftlet map, where the user clicks on a position on the map, then the application will determine the country and the population information. Code snippet:
+            // Leaflet map setup
+            const map = L.map('map').setView([0, 0], 2);
+            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map);
+            // Event listener for map click
+            map.on('click', (e) => {
+            const latlng = e.latlng;
+            getCountryInfo(latlng.lat, latlng.lng);
+            });
 
 
 ### In terms of design (requirements):
