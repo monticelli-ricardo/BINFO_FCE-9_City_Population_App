@@ -4,6 +4,7 @@
 ## Description
 
 This is a JS-based web page that retrieves information about the population of cities. 
+
 The data is accessible in JSON format on the REST API endpoint: 'https://data.opendatasoft.com/explore/dataset/geonames-all-cities-with-a-population-1000%40public/api/?disjunctive.cou_name_en '
 
 
