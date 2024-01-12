@@ -20,25 +20,28 @@ app.use(express.static(new URL('public', import.meta.url).pathname));
 // API endpoint to retrieve cities data
 app.get('/api/cities', async (req, res) => {
     try {
+        const regex = /^[A-Z]{2}$/;
         const country = req.query.country;
         console.log('Looking for the top 5 cities of: ', country);
-        const apiUrl = 'https://data.opendatasoft.com/api/explore/v2.1/catalog/datasets/geonames-all-cities-with-a-population-1000@public/records?select=name%2C%20population&order_by=population%20DESC&limit=5&refine=country_code%3A' + encodeURIComponent(country);
-        console.log('API Request to OpenData: ', apiUrl);
-        // Make the API call
-        const response = await fetch(apiUrl);
-
-        // Log the response to the console
-        console.log('API Response:', response.status, response.statusText);
-
-        if (!response.ok) {
-            console.error('Error fetching cities data - Status:', response.status);
-            res.status(response.status).json({ error: `Failed to fetch cities data - Status: ${response.status}` });
-            return;
+        if(regex.test(country)){
+            //Country output from Map click
+            const apiUrl = 'https://data.opendatasoft.com/api/explore/v2.1/catalog/datasets/geonames-all-cities-with-a-population-1000@public/records?select=name%2C%20population&order_by=population%20DESC&limit=5&refine=country_code%3A' + encodeURIComponent(country);
+            console.log('API Request to OpenData: ', apiUrl);
+            const response = await fetch(apiUrl); // Make the API call
+            console.log('API Response:', response.status, response.statusText);
+            const data = await response.json();
+            console.log("Servejs response:", data);
+            res.json(data);
+        } else {
+            // Country output from user input
+            const apiUrl = 'https://data.opendatasoft.com/api/explore/v2.1/catalog/datasets/geonames-all-cities-with-a-population-1000@public/records?select=name%2C%20population&order_by=population%20DESC&limit=5&refine=cou_name_en%3A' + encodeURIComponent(country);
+            console.log('API Request to OpenData: ', apiUrl);
+            const response = await fetch(apiUrl); // Make the API call
+            console.log('API Response:', response.status, response.statusText);
+            const data = await response.json();
+            console.log("Servejs response:", data);
+            res.json(data);
         }
-
-        const data = await response.json();
-        console.log("Servejs response:", data);
-        res.json(data);
     } catch (error) {
         console.error('Error fetching cities data:', error);
         res.status(500).json({ error: 'Internal Server Error' });
