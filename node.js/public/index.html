@@ -1,31 +1,101 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>WP.Exercise3 - JS City Population App</title>
-    <script asyc src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+    <link rel="icon" type="image/png" href="./assets/icon.png" />
+    <!-- Add Bootstrap for styling and responsiveness -->
+    <link
+      rel="stylesheet"
+      href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
+    />
     <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
     <style>
-        #map {
-            height: 400px;
-        }
+      body {
+        font-family: "Arial", sans-serif;
+        background-color: #f8f9fa;
+        color: #495057;
+      }
+
+      h1 {
+        text-align: center;
+        margin-top: 30px;
+      }
+
+      .container {
+        max-width: 600px;
+        margin: 0 auto;
+      }
+
+      .form-group {
+        margin-bottom: 20px;
+      }
+
+      #map {
+        height: 400px;
+        margin-bottom: 20px;
+      }
+
+      #overlay-container {
+        margin-top: 20px;
+      }
+      /* Custom styles for the light blue button */
+      .custom-btn {
+        background-color: #9cb6c0; /* Light blue color */
+        border-color: #9cb6c0; /* Border color same as background */
+        color: #fff; /* White text color */
+      }
+      .custom-btn:hover {
+        background-color: #778b92; /* Light blue color */
+        border-color: #778b92; /* Border color same as background */
+      }
     </style>
-</head>
-<body>
+  </head>
+  <body>
+    <div class="container">
+      <h1>City Population Finder</h1>
 
-    <h1>City Population Finder</h1>
+      <div class="form-group">
+        <label for="countryInput">Enter Country Name in English:</label>
+        <div class="input-group">
+          <input
+            type="text"
+            class="form-control"
+            id="countryInput"
+            onkeypress="handleKeyPress(event)"
+            placeholder="Type a country name"
+          />
+          <div class="input-group-append">
+            <button class="btn custom-btn" type="button" onclick="searchCities">
+              <img
+                src="./assets/lens-icon.png"
+                alt="Search"
+                style="width: 20px; height: 20px"
+              />
+            </button>
+          </div>
+        </div>
+      </div>
 
-    <label for="countryInput">Enter Country Name in English:</label>
-    <input type="text" id="countryInput" placeholder="Type a country name">
+      <div id="map"></div>
 
-    <button onclick="searchCities()">Search Cities</button>
-
-    <div id="map"></div>
-
-    <div id="overlay-container"></div>
+      <div id="tabs" class="nav nav-tabs"></div>
+      <div id="overlay-container"></div>
+    </div>
 
     <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
     <script src="./main.js"></script>
-</body>
+    <script>
+      function handleKeyPress(event) {
+        if (event.key === "Enter") {
+          searchCities();
+        }
+      }
+    </script>
+  </body>
 </html>
