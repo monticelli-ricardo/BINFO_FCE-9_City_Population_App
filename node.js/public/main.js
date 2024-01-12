@@ -36,6 +36,7 @@ function searchCities() {
         console.log("/api/cities Response:", response);
         const data = response.data;
         displayCities(data.results);
+        document.getElementById("countryInput").value = "";
       } else {
         console.error("Error fetching data:", response);
       }
@@ -85,97 +86,6 @@ function searchCitiesByCountry(countryCode) {
     .catch((error) => console.error("Error fetching data:", error));
 }
 
-// Function to display city information in an overlay window
-// function displayCities(cityData) {
-//   if (cityData === null || cityData.length === 0) {
-//     alert("The Country entered is wrong! Try again.");
-//     return;
-//   } else {
-//     //Contruct the Overlay Element
-//     const citiesOverlay = document.createElement("div");
-//     citiesOverlay.classList.add("cities-overlay");
-//     // Overlay title
-//     const overlayHeader = document.createElement("h2");
-//     const countryName = cityData[0].cou_name_en;
-//     overlayHeader.textContent = "Top 5 Cities in " + countryName;
-//     citiesOverlay.appendChild(overlayHeader);
-//     // Overlay table for the cities
-//     const tableBody = document.createElement("table");
-//     tableBody.classList.add("cities-table");
-
-//     const thead = document.createElement("thead");
-//     const row = tableBody.insertRow();
-//     row.insertCell(0).textContent = "City Name";
-//     row.insertCell(1).textContent = "Population";
-
-//     // Fill up the table with the API response
-//     const tbody = tableBody.insertRow();
-//     for (const city of cityData) {
-//       const row = tableBody.insertRow();
-//       row.insertCell(0).textContent = city.name;
-//       row.insertCell(1).textContent = city.population;
-//     }
-//     // Overlay "close" functionality
-//     const closeButton = document.createElement("button");
-//     closeButton.textContent = "Close";
-//     closeButton.addEventListener("click", () => {
-//       overlayContainer.classList.add("hidden");
-//       citiesOverlay.remove(); // Remove the Overlay contained elements
-//     });
-
-//     citiesOverlay.appendChild(tableBody);
-//     citiesOverlay.appendChild(closeButton);
-
-//     const overlayContainer = document.querySelector("#overlay-container");
-//     overlayContainer.appendChild(citiesOverlay);
-//     citiesOverlay.classList.remove("hidden");
-//   }
-// }function displayCities(cityData) {
-//   if (cityData === null || cityData.length === 0) {
-//     alert("The Country entered is wrong! Try again.");
-//     return;
-//   } else {
-//     //Contruct the Overlay Element
-//     const citiesOverlay = document.createElement("div");
-//     citiesOverlay.classList.add("cities-overlay");
-//     // Overlay title
-//     const overlayHeader = document.createElement("h2");
-//     const countryName = cityData[0].cou_name_en;
-//     overlayHeader.textContent = "Top 5 Cities in " + countryName;
-//     citiesOverlay.appendChild(overlayHeader);
-//     // Overlay table for the cities
-//     const tableBody = document.createElement("table");
-//     tableBody.classList.add("cities-table");
-
-//     const thead = document.createElement("thead");
-//     const row = tableBody.insertRow();
-//     row.insertCell(0).textContent = "City Name";
-//     row.insertCell(1).textContent = "Population";
-
-//     // Fill up the table with the API response
-//     const tbody = tableBody.insertRow();
-//     for (const city of cityData) {
-//       const row = tableBody.insertRow();
-//       row.insertCell(0).textContent = city.name;
-//       row.insertCell(1).textContent = city.population;
-//     }
-//     // Overlay "close" functionality
-//     const closeButton = document.createElement("button");
-//     closeButton.textContent = "Close";
-//     closeButton.addEventListener("click", () => {
-//       overlayContainer.classList.add("hidden");
-//       citiesOverlay.remove(); // Remove the Overlay contained elements
-//     });
-
-//     citiesOverlay.appendChild(tableBody);
-//     citiesOverlay.appendChild(closeButton);
-
-//     const overlayContainer = document.querySelector("#overlay-container");
-//     overlayContainer.appendChild(citiesOverlay);
-//     citiesOverlay.classList.remove("hidden");
-//   }
-// }
-
 function displayCities(cityData) {
   if (cityData === null || cityData.length === 0) {
     alert("The Country entered is wrong! Try again.");
@@ -194,9 +104,12 @@ function displayCities(cityData) {
     // If the tab container doesn't exist, create it
     tabContainer = document.createElement("div");
     tabContainer.id = tabId + "-tab";
-    tabContainer.classList.add("tab-pane", "fade");
+    tabContainer.classList.add("tab-pane", "inactive"); // Initially set as inactive
     tabContainer.innerHTML = `
-            <h2>Top 5 Cities in ${countryName}</h2>
+            <div class="d-flex justify-content-between align-items-center my-3">
+                <h2 class="m-0">Top 5 Cities in ${countryName}</h2>
+                <button type="button" class="btn btn-danger btn-sm rounded-circle" onclick="removeTab('${tabId}')">x</button>
+            </div>
             <table class="table cities-table">
                 <thead>
                     <tr>
@@ -212,8 +125,25 @@ function displayCities(cityData) {
     const tabNav = document.createElement("li");
     tabNav.classList.add("nav-item");
     tabNav.innerHTML = `
-            <a class="nav-link" id="${tabId}-nav" data-toggle="tab" href="#${tabId}-tab">${countryName}</a>
+            <div class="d-flex justify-content-between align-items-center px-5">
+                <span class="nav-link" id="${tabId}-nav" role="button" data-toggle="tab">${countryName} <button type="button" class="btn btn-danger btn-sm rounded-circle" onclick="removeTab('${tabId}')">x</button></span>
+                
+            </div>
         `;
+
+    // Add click event listener to the tab navigation link
+    tabNav.addEventListener("click", function () {
+      // Hide the previous tab
+      const previousTab = document.querySelector(".tab-pane.active");
+      if (previousTab) {
+        previousTab.classList.remove("active", "show");
+        previousTab.classList.add("inactive");
+      }
+
+      // Show the current tab
+      tabContainer.classList.remove("inactive");
+      tabContainer.classList.add("active", "show");
+    });
 
     // Append the new tab container and tab navigation link
     document.getElementById("overlay-container").appendChild(tabContainer);
@@ -224,6 +154,7 @@ function displayCities(cityData) {
   const previousTab = document.querySelector(".tab-pane.active");
   if (previousTab) {
     previousTab.classList.remove("active", "show");
+    previousTab.classList.add("inactive");
   }
 
   // Get the table body in the tab container
@@ -240,6 +171,18 @@ function displayCities(cityData) {
   }
 
   // Activate the newly created tab
-  const newTab = new bootstrap.Tab(document.getElementById(tabId + "-nav"));
-  newTab.show();
+  tabContainer.classList.remove("inactive");
+  tabContainer.classList.add("active");
+}
+
+// Function to remove a tab
+function removeTab(tabId) {
+  const tabContainer = document.getElementById(tabId + "-tab");
+  const tabNav = document.getElementById(tabId + "-nav");
+
+  if (tabContainer && tabNav) {
+    // Remove tab container and tab navigation link
+    tabContainer.remove();
+    tabNav.parentElement.remove();
+  }
 }

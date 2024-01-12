@@ -50,6 +50,28 @@
         background-color: #778b92; /* Light blue color */
         border-color: #778b92; /* Border color same as background */
       }
+
+      .active {
+        display: block;
+      }
+      .inactive {
+        display: none;
+      }
+
+      .btn-danger {
+        height: 25px;
+        width: 25px;
+        display: flex;
+        align-items: center;
+      }
+
+      .nav-link {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        justify-content: space-around;
+        gap: 10px;
+      }
     </style>
   </head>
   <body>
@@ -87,6 +109,7 @@
     <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"></script>
+
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
     <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
     <script src="./main.js"></script>
